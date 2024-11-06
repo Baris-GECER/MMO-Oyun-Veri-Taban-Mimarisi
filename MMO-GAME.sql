@@ -72,6 +72,7 @@ CREATE TABLE Factions (
 CREATE TABLE Faction_Memberships (
     CharacterID INT,
     FactionID INT,
+    DonationAmount INT,
     PRIMARY KEY (CharacterID, FactionID),
     FOREIGN KEY (CharacterID) REFERENCES Player_Character(CharacterID),
     FOREIGN KEY (FactionID) REFERENCES Factions(FactionID)
