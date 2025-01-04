@@ -1,28 +1,32 @@
 --Table: Appearance  <--Appears--> Player_Character
 Create Table Appearance(
 Appearance_ID int PRIMARY KEY  not null,
-Hair_Color NVARCHAR(30),
-Eye_Color NVARCHAR(30),
-Body_Type NVARCHAR(50),
+Hair_Color NVARCHAR(30) default 'Black' NOT NULL,
+Eye_Color NVARCHAR(30) default 'Brown' NOT NULL,
+Body_Type NVARCHAR(50) NOT NULL,
+CHECK(Body_Type = 'Masculine' or Body_Type = 'Feminine')
 );
 
 --Table: Inventory  <--Have Acces To--> Player_Character
 create Table Inventory(
 Inventory_ID int PRIMARY KEY NOT NULL,
-Capacity int not null,
+Capacity int default 50 not null,
 Current_Amount int not null
+CHECK (Capacity > 0)
 );
 
 --Table: Items
 create Table Items(
 Item_ID int PRIMARY KEY NOT NULL,
 Item_Name NVARCHAR(255) NOT NULL,
-Req_Level int NOT NULL,
-Item_Stats int NOT NULL,
+Req_Level int default 0 NOT NULL,
+Item_Stats int default 0 NOT NULL,
+
+CHECK( Req_Level <= 255)
 );
 
---Table : Items <-Contasins-> Inventory
-create Table Contasins(
+--Table : Items <-Contains-> Inventory
+create Table Contains_(
 Inventory_ID int not null,
 FOREIGN KEY (Inventory_ID) REFERENCES Inventory(Inventory_ID),
 Item_ID int not null,
@@ -33,16 +37,16 @@ PRIMARY KEY(Inventory_ID,Item_ID),
 --TABLE: Attributes 
 create Table Attributes(
 Attribute_ID int PRIMARY KEY  not null,
-MagicPower int not null,
-Dexterity int not null,
-Strength int not null,
-Mana int not null,
-Magic_Resistanse int not null,
-Armor int not null,
-Max_Health int not null,
+MagicPower int default 10 not null,
+Dexterity int default 10 not null,
+Strength int default 10 not null,
+Mana int default 10 not null,
+Magic_Resistanse int default 10 not null,
+Armor int  default 10 not null,
+Max_Health int default 100 not null,
 );
 
---TABLE : FACTİONS
+--TABLE : FACTIONS
 
 create Table Factions(
 Faction_ID int PRIMARY KEY NOT NULL,
@@ -55,10 +59,11 @@ Create Table Authority(
 Authority_Type NVARCHAR(10) NOT NULL,
 Authority_ID int not null,
 PRIMARY KEY (Authority_Type,Authority_ID),
-Can_Banish BIT NOT NULL,
-Can_Kick BIT NOT NULL,
-Can_Timeout BIT NOT NULL,
-Can_Block BIT NOT NULL,
+Can_Banish BIT default 0 NOT NULL,
+Can_Kick BIT default 0 NOT NULL,
+Can_Timeout BIT default 0 NOT NULL,
+Can_Block BIT default 0 NOT NULL,
+CHECK(Authority_Type = 'Player' or Authority_Type = 'GM' or Authority_Type = 'Admin' or Authority_Type = 'Executive')
 );
 
 --TABLE:SERVER
@@ -87,6 +92,7 @@ FOREIGN KEY (Server_ID,Server_IP) REFERENCES Server(Server_ID,Server_IP),
 
 );
 
+-- Membership_Account <--- Friends_with ---> Membership_Account
 CREATE TABLE Friends_with (
     account_id_1 INT,
     account_id_2 INT,
@@ -99,8 +105,8 @@ CREATE TABLE Friends_with (
 -- Main TABLE: Player_Character
 Create Table Player_Character(
  Character_ID int PRIMARY KEY Not null,
- Character_Name NVARCHAR(255) NOT NULL,
- Character_Level int Not Null,
+ Character_Name NVARCHAR(32) NOT NULL,
+ Character_Level int default 0 Not Null,
  Character_XP int not null,
  Character_Req_XP int not null,
 
@@ -110,19 +116,24 @@ Create Table Player_Character(
  FOREIGN KEY (Inventory_ID) REFERENCES Inventory(Inventory_ID),
  Attribute_ID int not null,
  FOREIGN KEY (Attribute_ID) REFERENCES Attributes(Attribute_ID),
- Faction_ID int not null,
+ Faction_ID int,
  FOREIGN KEY (Faction_ID) REFERENCES Factions(Faction_ID),
  Account_ID int not null,
  FOREIGN KEY (Account_ID) REFERENCES Membership_Account(Account_ID),
+
+ CHECK(Character_Level <= 255 and Character_Level >= 0 )
 );
 
 -- Table: Proficiency
 Create Table Proficiency(
 Proficiency_ID int PRIMARY KEY NOT NULL,
-Magic_Level int Not null,
-Melee_Level int Not null,
-Ranged_Level int Not null,
-Blocking_Level int Not null
+Magic_Level int default 0 Not null,
+Melee_Level int default 0 Not null,
+Ranged_Level int default 0 Not null,
+Blocking_Level int default 0 Not null
+
+CHECK(Magic_Level <= 100 and Melee_Level <= 100 and Ranged_Level <= 100 and Blocking_Level <= 100 and
+		Magic_Level >= 0 and Melee_Level >= 0 and Ranged_Level >= 0 and Blocking_Level >= 0)
 );
 
 --Table: Player_Character <---Learns---> Proficiency
@@ -137,8 +148,7 @@ PRIMARY KEY(Character_ID,Proficiency_ID)
 --Table : NPC
 create Table NPC(
 NPC_ID int PRIMARY KEY NOT NULL,
-NPC_Name NVARCHAR(255) not null,
-
+NPC_Name NVARCHAR(64),
 Attribute_ID int not null,
 FOREIGN KEY(Attribute_ID) REFERENCES Attributes(Attribute_ID),
 );
@@ -146,22 +156,22 @@ FOREIGN KEY(Attribute_ID) REFERENCES Attributes(Attribute_ID),
 --Table: Quests
 create Table Quests(
 Quest_ID int PRIMARY KEY NOT NULL,
-Description NVARCHAR(255) not null,
-Reward_Amount int not null,
+Description NVARCHAR(255) default NULL,
+Reward_Amount int NOT NULL,
 Quest_Name NVARCHAR(255) NOT NULL,
 
 NPC_ID int not null,
 FOREIGN KEY (NPC_ID) REFERENCES NPC(NPC_ID),
 );
 
---Table: Player_Character <-WİLL FOLLOW-> Quests
-create Table WİLL_FOLLOW(
+--Table: Player_Character <-WILL_FOLLOW-> Quests
+create Table WILL_FOLLOW(
 Character_ID int not null,
 FOREIGN KEY (Character_ID) references Player_Character(Character_ID),
 Quest_ID int NOT NULL,
 FOREIGN KEY (Quest_ID) REFERENCES Quests(Quest_ID),
 PRIMARY KEY (Character_ID,Quest_ID),
-isActive BIT not null,
+isActive BIT default 0 not null,
 );
 
 --Table : Monsters
@@ -178,7 +188,7 @@ FOREIGN KEY(Attribute_ID) REFERENCES Attributes(Attribute_ID),
 create Table Skills(
 Skills_ID int PRIMARY KEY NOT NULL,
 Skill_Cost int not null,
-Skill_Range int not null,
+Skill_Range  int default 1 not null,
 );
 
 --Table : Skills <--CAN USE--> Player_Character
@@ -195,7 +205,7 @@ PRIMARY KEY(Character_ID,Skills_ID),
 
 create Table Achivements(
 Achivement_ID int PRIMARY KEY NOT NULL,
-Achivement_Description NVARCHAR(255) NOT NULL,
+Achivement_Description NVARCHAR(255) default NULL,
 Achivement_Reward int not null,
 Achivement_Req int not null,
 );
