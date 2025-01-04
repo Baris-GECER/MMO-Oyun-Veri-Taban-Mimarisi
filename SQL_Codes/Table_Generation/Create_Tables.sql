@@ -69,7 +69,7 @@ CHECK(Authority_Type = 'Player' or Authority_Type = 'GM' or Authority_Type = 'Ad
 --TABLE:SERVER
 create Table Server(
 Server_ID int  NOT NULL,
-Server_IP int Not NULL,
+Server_IP varchar(20) Not NULL,
 PRIMARY KEY(Server_ID,Server_IP),
 Server_Location NVARCHAR(255) NOT NULL,
 );
@@ -87,7 +87,7 @@ Authority_ID int not null,
 FOREIGN KEY(Authority_Type,Authority_ID) REFERENCES Authority(Authority_Type,Authority_ID),
 
 Server_ID int  NOT NULL,
-Server_IP int Not NULL,
+Server_IP varchar(20) Not NULL,
 FOREIGN KEY (Server_ID,Server_IP) REFERENCES Server(Server_ID,Server_IP),
 
 );
@@ -96,6 +96,7 @@ FOREIGN KEY (Server_ID,Server_IP) REFERENCES Server(Server_ID,Server_IP),
 CREATE TABLE Friends_with (
     account_id_1 INT,
     account_id_2 INT,
+	Friendship_Start_Date date,
     PRIMARY KEY (account_id_1, account_id_2),
     FOREIGN KEY (account_id_1) REFERENCES membership_account(Account_ID),
     FOREIGN KEY (account_id_2) REFERENCES membership_account(Account_ID),
