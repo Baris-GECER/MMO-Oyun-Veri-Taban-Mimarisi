@@ -39,7 +39,7 @@ GO
 
 go
 CREATE TRIGGER trg_UpdateInventory
-ON Contasins
+ON Contains_
 AFTER INSERT
 AS
 BEGIN
