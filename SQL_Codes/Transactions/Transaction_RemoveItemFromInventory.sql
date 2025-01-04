@@ -10,53 +10,53 @@ BEGIN
         
 		DECLARE @CurrentAmount INT;
 
-        -- Item envanterde var mı?
+        -- Item envanterde var mÃ½?
         SELECT Current_Amount
         INTO @CurrentAmount
-        FROM Contasins
+        FROM Contains_
         WHERE Inventory_ID = @InventoryID AND Item_ID = @ItemID;
 
         IF @CurrentAmount IS NULL
         BEGIN
-            PRINT 'Item envanterde bulunamadı';
+            PRINT 'Item envanterde bulunamadÃ½';
         END
 
-        -- Kaldırmak için yeterli sayıda item var mı?
+        -- KaldÃ½rmak iÃ§in yeterli sayÃ½da item var mÃ½?
         IF @QuantityToRemove > @CurrentAmount
         BEGIN
-            PRINT 'Çıkarmak için gereken sayıda eşya yok';
+            PRINT 'Ã‡Ã½karmak iÃ§in gereken sayÃ½da eÃ¾ya yok';
         END
 
-        -- Envanterden Eşya kaldır veya güncelle
+        -- Envanterden EÃ¾ya kaldÃ½r veya gÃ¼ncelle
         IF @QuantityToRemove = @CurrentAmount
         BEGIN
-            -- eşya sayısı kaldırılacak ile aynı ise eşyayı envanterden kaldır
-            DELETE FROM Contasins
+            -- eÃ¾ya sayÃ½sÃ½ kaldÃ½rÃ½lacak ile aynÃ½ ise eÃ¾yayÃ½ envanterden kaldÃ½r
+            DELETE FROM Contains_
             WHERE Inventory_ID = @InventoryID AND Item_ID = @ItemID;
         END
         ELSE
         BEGIN
-            -- Item sayısını azalt
-            UPDATE Contasins
+            -- Item sayÃ½sÃ½nÃ½ azalt
+            UPDATE Contains_
             SET Current_Amount = @CurrentAmount - @QuantityToRemove
             WHERE Inventory_ID = @InventoryID AND Item_ID = @ItemID;
         END
 
-        -- Mevcut miktarı güncelle
+        -- Mevcut miktarÃ½ gÃ¼ncelle
         UPDATE Inventory
         SET Current_Amount = Current_Amount - @QuantityToRemove
         WHERE Inventory_ID = @InventoryID;
 
-        -- Aktarımı gerçekleştir
+        -- AktarÃ½mÃ½ gerÃ§ekleÃ¾tir
         COMMIT TRANSACTION;
 
-        PRINT 'Item başarıyla envanterden kaldırıldı';
+        PRINT 'Item baÃ¾arÃ½yla envanterden kaldÃ½rÃ½ldÃ½';
     CATCH
     BEGIN CATCH
         -- Hata olduysa eski haline geri getir
         ROLLBACK TRANSACTION;
 		
-		PRINT 'Itemi envanterden kaldırırken bir hatayla karşılaşıldı';
+		PRINT 'Itemi envanterden kaldÃ½rÃ½rken bir hatayla karÃ¾Ã½laÃ¾Ã½ldÃ½';
     
 	END CATCH
 END;
