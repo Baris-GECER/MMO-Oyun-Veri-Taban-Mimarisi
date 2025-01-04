@@ -1,9 +1,9 @@
-create procedure Bolumdekiler
-@descriptionn varchar(50),
-@aktif BIT 
+create procedure isQuestActive
+@Quest_ID varchar(50),
+@isactive BIT 
 AS 
 Begin 
-select*from Quests where  Description=@descriptionn and isActive=@aktif;
+select*from Quests where  Quest_ID = @Quest_ID and isActive=@isactive;
 End;
 
 
@@ -11,7 +11,7 @@ End;
 
 
 
-CREATE PROCEDURE EnvanterBul3
+CREATE PROCEDURE GetCharacterInventory
     @id VARCHAR(10)
 AS
 BEGIN
@@ -26,7 +26,7 @@ END;
 
 
 
-CREATE PROCEDURE Kisi
+CREATE PROCEDURE GetBetweenTwoLevels
     @lwl1 INT,
     @lwl2 INT
 AS
@@ -52,8 +52,8 @@ BEGIN
 
 
 
-CREATE PROCEDURE KlanUye
-    @Klan_id INT -- Aranacak klan ID'si
+CREATE PROCEDURE GetMemberCount
+    @Faction_id INT -- Aranacak klan ID'si
 AS
 BEGIN
     DECLARE @PlayerCount INT;
@@ -61,7 +61,7 @@ BEGIN
    
     SELECT @PlayerCount = COUNT(*)
     FROM Player_Character
-    WHERE Faction_ID = @Klan_id;
+    WHERE Faction_ID = @Faction_id;
 
    
     RETURN @PlayerCount;
@@ -73,12 +73,11 @@ END;
 
 
 
-create procedure UyeBilgi
-@klanismi varchar(25)
+create procedure GetMembersFromFactionID
+@Faction_Name varchar(25)
 as
 begin 
-select f.Faction_ID,f.Faction_Name,f.Donation,p.Account_ID,p.Character_Name,p.Character_Level,p.Appearance_ID,p.Attribute_ID,
-p.Character_ID
-from  Factions f inner join Player_Character p on f.Faction_ID=p.Faction_ID
-where f.Faction_Name=@klanismi;
-End
+select f.Faction_ID, f.Faction_Name, f.Donation,p.Account_ID, p.Character_Name, p.Character_Level, p.Appearance_ID, p.Attribute_ID, p.Character_ID
+from  Factions f inner join Player_Character p on f.Faction_ID = p.Faction_ID
+where f.Faction_Name = @Faction_Name;
+End;
