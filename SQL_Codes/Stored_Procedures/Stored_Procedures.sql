@@ -17,7 +17,7 @@ AS
 BEGIN
     
     SELECT C.Item_ID, I.Item_Name,Req_Level,Item_Stats
-    FROM Contasins C
+    FROM Contains_ C
     INNER JOIN Items I ON C.Item_ID = I.Item_ID
     WHERE C.Inventory_ID = @id;
 END;
