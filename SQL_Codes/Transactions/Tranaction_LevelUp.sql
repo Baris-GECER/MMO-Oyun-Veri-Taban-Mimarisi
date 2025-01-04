@@ -22,15 +22,15 @@ BEGIN
 
 		else
 		BEGIN
-        -- Level atladý mý?
+        -- Level atladÃ½ mÃ½?
 			WHILE @CurrentXP >= @RequiredXP
 			BEGIN
 				@LevelUpAmount = @LevelUpAmount + 1;
 				SET @CurrentXP = @CurrentXP - @RequiredXP; -- XP'yi gerekli miktar kadar azalt
-				SET @Level = @Level + 1;                  -- level artýþý
-				SET @RequiredXP = @RequiredXP + (@RequiredXP / 2); -- Gereken XP yi 1.5 katýna çýkar
+				SET @Level = @Level + 1;                  -- level artÃ½Ã¾Ã½
+				SET @RequiredXP = @RequiredXP + (@RequiredXP / 2); -- Gereken XP yi 1.5 katÃ½na Ã§Ã½kar
 
-				-- ödül olarak nitelikleri güncelle
+				-- Ã¶dÃ¼l olarak nitelikleri gÃ¼ncelle
 				UPDATE Attributes
 				SET 
 			        Max_Health = Max_Health + 10),
@@ -40,7 +40,7 @@ BEGIN
 				WHERE Attribute_ID = @AttributeID;
 				END
 		END
-        -- Karakter bilgilerini güncelle
+        -- Karakter bilgilerini gÃ¼ncelle
         UPDATE Player_Character
         SET 
             Character_XP = @CurrentXP,
@@ -60,7 +60,7 @@ BEGIN
                 
 			WHERE Attribute_ID = @AttributeID;
 
-            PRINT 'Karakter baþarýyla seviye atladý';
+            PRINT 'Karakter baÃ¾arÃ½yla seviye atladÃ½';
        
         -- Commit the transaction if all operations succeed
         COMMIT TRANSACTION;
@@ -70,7 +70,7 @@ BEGIN
     BEGIN CATCH
         -- Rollback the transaction in case of any errors
         ROLLBACK TRANSACTION;
-        PRINT 'seviye atlarken bir hata gerçekleþti';
+        PRINT 'seviye atlarken bir hata gerÃ§ekleÃ¾ti';
 
     END CATCH
 END;
