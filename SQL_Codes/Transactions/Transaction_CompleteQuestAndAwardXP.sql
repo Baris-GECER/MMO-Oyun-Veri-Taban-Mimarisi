@@ -10,7 +10,7 @@ BEGIN
         DECLARE @CurrentXP INT, @RequiredXP INT, @Level INT, @RewardXP INT;
         DECLARE @AttributeID INT;
 
-        --Görev ödülünü çek
+        --GÃ¶rev Ã¶dÃ¼lÃ¼nÃ¼ Ã§ek
         SELECT Reward_Amount
         INTO @RewardXP
         FROM Quests
@@ -18,10 +18,10 @@ BEGIN
 
         IF @RewardXP IS NULL
         BEGIN
-            PRINT 'Görev bulunamadý';
+            PRINT 'GÃ¶rev bulunamadÃ½';
         END
 
-        -- Karakter bilgilerini çek
+        -- Karakter bilgilerini Ã§ek
         SELECT Character_XP, Character_Req_XP, Character_Level, Attribute_ID
         INTO @CurrentXP, @RequiredXP, @Level, @AttributeID
         FROM Player_Character
@@ -29,20 +29,20 @@ BEGIN
 
         IF @CurrentXP IS NULL
         BEGIN
-            PRINT 'Karakter bulunamadý';
+            PRINT 'Karakter bulunamadÃ½';
         END
 
-        -- Karakter XP sini güncelle
+        -- Karakter XP sini gÃ¼ncelle
         SET @CurrentXP = @CurrentXP + @RewardXP;
 
-        -- Level atladý mý?
+        -- Level atladÃ½ mÃ½?
         WHILE @CurrentXP >= @RequiredXP
         BEGIN
             SET @CurrentXP = @CurrentXP - @RequiredXP; -- XP'yi gerekli miktar kadar azalt
-            SET @Level = @Level + 1;                  -- level artýþý
-            SET @RequiredXP = @RequiredXP + (@RequiredXP / 2); -- Gereken XP yi 1.5 katýna çýkar
+            SET @Level = @Level + 1;                  -- level artÃ½Ã¾Ã½
+            SET @RequiredXP = @RequiredXP + (@RequiredXP / 2); -- Gereken XP yi 1.5 katÃ½na Ã§Ã½kar
 
-            -- ödül olarak nitelikleri güncelle
+            -- Ã¶dÃ¼l olarak nitelikleri gÃ¼ncelle
             UPDATE Attributes
             SET 
                 Max_Health = Max_Health + 10,
@@ -52,7 +52,7 @@ BEGIN
             WHERE Attribute_ID = @AttributeID;
         END
 
-        -- Karakter bilgilerini güncelle
+        -- Karakter bilgilerini gÃ¼ncelle
         UPDATE Player_Character
         SET 
             Character_XP = @CurrentXP,
@@ -60,21 +60,21 @@ BEGIN
             Character_Req_XP = @RequiredXP
         WHERE Character_ID = @CharacterID;
 
-        -- görevi tamamlanmýþ olarak iþaretle
-        UPDATE WÝLL_FOLLOW
+        -- gÃ¶revi tamamlanmÃ½Ã¾ olarak iÃ¾aretle
+        UPDATE WILL_FOLLOW
         SET isActive = 0
         WHERE Character_ID = @CharacterID AND Quest_ID = @QuestID;
 
-        -- Her þey baþarýlý ise deðiþiklikleri gerçekleþtir
+        -- Her Ã¾ey baÃ¾arÃ½lÃ½ ise deÃ°iÃ¾iklikleri gerÃ§ekleÃ¾tir
         COMMIT TRANSACTION;
 
-        PRINT 'XP baþarýyla güncellendi';
+        PRINT 'XP baÃ¾arÃ½yla gÃ¼ncellendi';
     CATCH
     BEGIN CATCH
-        -- Hata olursa eski durumuna dön
+        -- Hata olursa eski durumuna dÃ¶n
         ROLLBACK TRANSACTION;
 
-        PRINT 'Ödülü verirken bir sorun ile karþýlaþýldý';
+        PRINT 'Ã–dÃ¼lÃ¼ verirken bir sorun ile karÃ¾Ã½laÃ¾Ã½ldÃ½';
 
     END CATCH
 END;
