@@ -73,29 +73,34 @@ END;
 go
 
 go
-CREATE TRIGGER trg_UpdateInventoryOnDelete
-ON Contasins
+ALTER TRIGGER trg_UpdateInventoryOnDelete
+ON Contains_
 AFTER DELETE
 AS
 BEGIN
-    DECLARE @Inventory_ID INT;
+    DECLARE @Item_ID INT;
     DECLARE @Current_Amount INT;
 
     -- İlgili Inventory_ID'yi al
-    SELECT @Inventory_ID = deleted.Inventory_ID
+    SELECT @Item_ID = deleted.Item_ID
     FROM deleted;
 
     -- Mevcut Current_Amount değerini al
-    SELECT @Current_Amount = Inventory.Current_Amount
-    FROM Inventory
-    WHERE Inventory.Inventory_ID = @Inventory_ID;
+	declare @envID int
+    SELECT @envID = Inventory_ID
+    FROM Contains_
+    WHERE Contains_.Item_ID = @Item_ID;
+
+	SELECT @Current_Amount = Current_Amount
+	from Inventory
+	where Inventory_ID = @envID
 
     -- Current_Amount'u 0'dan küçük olmamak şartıyla azalt
     IF @Current_Amount - 1 >= 0
     BEGIN
         UPDATE Inventory
         SET Current_Amount = @Current_Amount - 1
-        WHERE Inventory.Inventory_ID = @Inventory_ID;
+        WHERE Inventory.Inventory_ID = @Item_ID;
     END
     ELSE
     BEGIN
