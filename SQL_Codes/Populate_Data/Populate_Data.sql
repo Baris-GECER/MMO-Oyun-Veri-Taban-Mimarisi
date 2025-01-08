@@ -11,17 +11,6 @@ insert into Achivements values(6,'defat a moster without other noticing',2100,56
 insert into Achivements values(7,'Demolish bandit hideout',2300,570)
 
 
------------------------------------------------------------------
-
-insert into Achives (Achivement_ID,Account_ID)
-values(2,1)
-insert into Achives values(2,2)
-insert into Achives values(2,3)
-insert into Achives values(5,4)
-insert into Achives values(6,4)
-insert into Achives values(7,4)
-
-
 
 -----------------------------------------------------------------
 insert into Appearance(Appearance_ID,Hair_Color,Eye_Color,Body_Type)
@@ -54,22 +43,7 @@ insert into Authority values('Player',1,0,0,0,1)
 insert into Authority values('GM',2,0,1,1,1)
 insert into Authority values('Player',3,0,1,1,1)
 insert into Authority values('Executive',4,1,1,1,1)
------------------------------------------------------------------
 
-
-insert into CanUse (Skills_ID,Character_ID,Req_Prof_Level) 
-values(8,14,23)
-insert into CanUse values(7,15,12)
------------------------------------------------------------------
-
-
-insert into Contains_ (Inventory_ID,Item_ID)
-values(2,1232)
-insert into Contains_ values(2,1342)
-insert into Contains_ values(2,2556)
-insert into Contains_ values(4,3234)
-insert into Contains_ values(6,5042)
-insert into Contains_ values(3,3112)
 
 -----------------------------------------------------------------
 
@@ -77,10 +51,6 @@ insert into Factions(Faction_ID,Donation,Faction_Name)
 values(0,0,'DRAGONX')
 insert into Factions values(1,7300,'GPEX')
 
------------------------------------------------------------------
-
-insert into Friends_with (account_id_1,account_id_2,Friendship_Start_Date)
-values(4,3,GETDATE())
 
 -----------------------------------------------------------------
 
@@ -134,23 +104,10 @@ insert into Items values(5112,'Hunter Dof',27,19)
 insert into Items values(600,'standart issue chain mail',27,19)
 insert into Items values(626,'iron plate armor',27,19)
 insert into Items values(6345,'Drake Scale armor',27,19)
+insert into Items values(1032,'Drake Scale sword',33,19)
 
 
------------------------------------------------------------------
 
-insert into Learns (Character_ID,Proficiency_ID)
-values(14,11)
-
-insert into Learns values(15,12)
-
------------------------------------------------------------------
-
-insert into Membership_Account(Account_ID , User_Name , Password , email_Address , Authority_Type , Authority_ID , Server_ID , Server_IP)
-values(0,'Yasaki','295113','aktar25@gmail.com','Player',1,0,'192.168.1.1')
-insert into Membership_Account values(1,'Karina_32','A!_ammfae','asd@gmail.com','Player',1,0,'192.168.1.1')
-insert into Membership_Account values(2,'MASKLESS','B%SNgAc','abc@gmail.com','Player',1,0,'192.168.1.1')
-insert into Membership_Account values(3,'DarkKnight','Jkjncwý0','jkl@gmail.com','Admin',0,0,'192.168.1.1')
-insert into Membership_Account values(4,'DE4thIsC0mming','9eEfnv!#','xyz@gmail.com','GM',3,0,'192.168.1.1')
 
 -----------------------------------------------------------------
 
@@ -165,13 +122,6 @@ insert into NPC (NPC_ID,NPC_Name,Attribute_ID)
 values(0,'Fisherman',82434424)
 insert into NPC values(1,'blacksmith',91142133)
 
------------------------------------------------------------------
-
-insert into Player_Character(Character_ID,Character_Name,Character_Level,Character_XP,Character_Req_XP,Appearance_ID,Inventory_ID,Attribute_ID,Faction_ID,Account_ID)
-values(14,'Black Widow',26,5000,7500,16,0,91142133,NULL,3)
-insert into Player_Character values(15,'Dare Devil',72,3000,4500,17,1,82434424,1,2)
-insert into Player_Character values(16,'BigGuy',46,3000,4500,17,1,91142133,NULL,2)
-insert into Player_Character values(17,'MisterHammer',52,3000,4500,18,2,14241513,NULL,5)
 
 -----------------------------------------------------------------
 
@@ -195,6 +145,26 @@ insert into Server values(1,'192.168.1.1','Turkey')
 
 -----------------------------------------------------------------
 
+insert into Membership_Account(Account_ID , User_Name , Password , email_Address , Authority_Type , Authority_ID , Server_ID , Server_IP)
+values(0,'Yasaki','295113','aktar25@gmail.com','Player',1,0,'192.168.1.1')
+insert into Membership_Account values(1,'Karina_32','A!_ammfae','asd@gmail.com','Player',1,0,'192.168.1.1')
+insert into Membership_Account values(2,'MASKLESS','B%SNgAc','abc@gmail.com','Player',1,0,'192.168.1.1')
+insert into Membership_Account values(3,'DarkKnight','Jkjncw 0','jkl@gmail.com','Admin',0,0,'192.168.1.1')
+insert into Membership_Account values(4,'DE4thIsC0mming','9eEfnv!#','xyz@gmail.com','GM',3,0,'192.168.1.1')
+
+
+-----------------------------------------------------------------
+
+insert into Player_Character(Character_ID,Character_Name,Character_Level,Character_XP,Character_Req_XP,Appearance_ID,Inventory_ID,Attribute_ID,Faction_ID,Account_ID)
+values(14,'Black Widow',26,5000,7500,16,0,91142133,NULL,3)
+insert into Player_Character values(15,'Dare Devil',72,3000,4500,17,1,82434424,1,2)
+insert into Player_Character values(16,'BigGuy',46,3000,4500,17,1,91142133,NULL,2)
+insert into Player_Character values(17,'MisterHammer',52,3000,4500,18,2,14241513,NULL,5)
+
+
+
+-----------------------------------------------------------------
+
 insert into Skills(Skills_ID,Skill_Cost,Skill_Range)
 values(9,173,54)
 insert into Skills values(10,85,19)
@@ -204,3 +174,47 @@ insert into Skills values(10,85,19)
 insert into WILL_FOLLOW(Character_ID,Quest_ID,isActive)
 values(14,20,1)
 insert into WILL_FOLLOW values(15,21,0)
+
+
+
+-----------------------------------------------------------------
+
+insert into Achives (Achivement_ID,Account_ID)
+values(2,1)
+insert into Achives values(2,2)
+insert into Achives values(2,3)
+insert into Achives values(5,4)
+insert into Achives values(6,4)
+insert into Achives values(7,4)
+
+-----------------------------------------------------------------
+
+
+insert into CanUse (Skills_ID,Character_ID,Req_Prof_Level) 
+values(9,14,23)
+insert into CanUse values(10,15,12)
+
+-----------------------------------------------------------------
+
+insert into Friends_with (account_id_1,account_id_2,Friendship_Start_Date)
+values(1,3,GETDATE())
+
+
+-----------------------------------------------------------------
+
+insert into Learns (Character_ID,Proficiency_ID)
+values(14,11)
+
+insert into Learns values(15,12)
+
+
+-----------------------------------------------------------------
+
+
+insert into Contains_ (Inventory_ID,Item_ID)
+values(2,1232)
+insert into Contains_ values(2,1342)
+insert into Contains_ values(2,2556)
+insert into Contains_ values(4,3234)
+insert into Contains_ values(6,5042)
+insert into Contains_ values(3,3112)
