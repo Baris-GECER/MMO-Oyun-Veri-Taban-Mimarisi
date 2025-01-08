@@ -11,8 +11,7 @@ BEGIN
         DECLARE @AttributeID INT;
 
         --Görev ödülünü çek
-        SELECT Reward_Amount
-        INTO @RewardXP
+        SELECT @RewardXP = Reward_Amount
         FROM Quests
         WHERE Quest_ID = @QuestID;
 
@@ -22,8 +21,7 @@ BEGIN
         END
 
         -- Karakter bilgilerini çek
-        SELECT Character_XP, Character_Req_XP, Character_Level, Attribute_ID
-        INTO @CurrentXP, @RequiredXP, @Level, @AttributeID
+        SELECT @CurrentXP = Character_XP, @RequiredXP = Character_Req_XP, @Level = Character_Level, @AttributeID = Attribute_ID
         FROM Player_Character
         WHERE Character_ID = @CharacterID;
 
@@ -39,7 +37,7 @@ BEGIN
         WHILE @CurrentXP >= @RequiredXP
         BEGIN
             SET @CurrentXP = @CurrentXP - @RequiredXP; -- XP'yi gerekli miktar kadar azalt
-            SET @Level = @Level + 1;                  -- level artýþý
+            SET @Level = @Level + 1;                  -- level artışı
             SET @RequiredXP = @RequiredXP + (@RequiredXP / 2); -- Gereken XP yi 1.5 katýna çýkar
 
             -- ödül olarak nitelikleri güncelle
@@ -69,7 +67,7 @@ BEGIN
         COMMIT TRANSACTION;
 
         PRINT 'XP baþarýyla güncellendi';
-    CATCH
+	END TRY
     BEGIN CATCH
         -- Hata olursa eski durumuna dön
         ROLLBACK TRANSACTION;
