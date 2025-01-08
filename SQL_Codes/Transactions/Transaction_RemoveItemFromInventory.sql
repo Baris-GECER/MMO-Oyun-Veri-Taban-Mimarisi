@@ -11,20 +11,19 @@ BEGIN
 		DECLARE @CurrentAmount INT;
 
         -- Item envanterde var mý?
-        SELECT Current_Amount
-        INTO @CurrentAmount
-        FROM Contains_
-        WHERE Inventory_ID = @InventoryID AND Item_ID = @ItemID;
+        SELECT @CurrentAmount = Current_Amount
+        FROM Inventory
+        WHERE Inventory_ID = @InventoryID;
 
         IF @CurrentAmount IS NULL
         BEGIN
-            PRINT 'Item envanterde bulunamadý';
+            PRINT 'Item envanterde bulunamadı';
         END
 
         -- Kaldýrmak için yeterli sayýda item var mý?
         IF @QuantityToRemove > @CurrentAmount
         BEGIN
-            PRINT 'Çýkarmak için gereken sayýda eþya yok';
+            PRINT 'Çıkarmak için gereken sayýda eşya yok';
         END
 
         -- Envanterden Eþya kaldýr veya güncelle
@@ -37,9 +36,9 @@ BEGIN
         ELSE
         BEGIN
             -- Item sayýsýný azalt
-            UPDATE Contains_
+            UPDATE Inventory
             SET Current_Amount = @CurrentAmount - @QuantityToRemove
-            WHERE Inventory_ID = @InventoryID AND Item_ID = @ItemID;
+            WHERE Inventory_ID = @InventoryID ;
         END
 
         -- Mevcut miktarý güncelle
@@ -50,13 +49,13 @@ BEGIN
         -- Aktarýmý gerçekleþtir
         COMMIT TRANSACTION;
 
-        PRINT 'Item baþarýyla envanterden kaldýrýldý';
-    CATCH
+        PRINT 'Item başarıyla envanterden kaldırıldı';
+    END TRY
     BEGIN CATCH
         -- Hata olduysa eski haline geri getir
         ROLLBACK TRANSACTION;
 		
-		PRINT 'Itemi envanterden kaldýrýrken bir hatayla karþýlaþýldý';
+		PRINT 'Itemi envanterden kaldırırken bir hatayla karşılaşıldı';
     
 	END CATCH
 END;
