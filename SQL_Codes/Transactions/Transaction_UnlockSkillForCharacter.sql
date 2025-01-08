@@ -9,52 +9,50 @@ BEGIN
 
         DECLARE @ProficiencyID INT, @CurrentProficiencyLevel INT, @RequiredProficiencyLevel INT;
 
-        -- skill için gereken levli çek
-        SELECT Req_Prof_Level
-        INTO @RequiredProficiencyLevel
-        FROM Skills
+        -- skill iÃ§in gereken levli Ã§ek
+        SELECT @RequiredProficiencyLevel =  Req_Prof_Level
+        FROM CanUse
         WHERE Skills_ID = @SkillID;
 
         IF @RequiredProficiencyLevel IS NULL
         BEGIN
-            PRINT 'Böyle bir skill yok';
+            PRINT 'BÃ¶yle bir skill yok';
         END
 
-        -- Karakterin Ustalýk seviyesini çek
-        SELECT Learns.Proficiency_ID, Proficiency.Magic_Level
-        INTO @ProficiencyID, @CurrentProficiencyLevel
+        -- Karakterin UstalÃ½k seviyesini Ã§ek
+        SELECT @ProficiencyID = Learns.Proficiency_ID, @CurrentProficiencyLevel = Proficiency.Magic_Level
         FROM Learns
         INNER JOIN Proficiency ON Learns.Proficiency_ID = Proficiency.Proficiency_ID
         WHERE Learns.Character_ID = @CharacterID;
 
         IF @CurrentProficiencyLevel IS NULL
         BEGIN
-            PRINT 'Karakter gereken bilgilere sahip deðil';
+            PRINT 'Karakter gereken bilgilere sahip deÃ°il';
         END
 
-        -- Karakter gereklilikleri karþýlýyor mu?
+        -- Karakter gereklilikleri karÃ¾Ã½lÃ½yor mu?
         IF @CurrentProficiencyLevel < @RequiredProficiencyLevel
         BEGIN
-            PRINT 'Karakter gereken yeterlilik seviyesini karþýlamýyor';
+            PRINT 'Karakter gereken yeterlilik seviyesini karÃ¾Ã½lamÃ½yor';
         END
 
-        -- skill hali hazýrda açýk mý
+        -- skill hali hazÃ½rda aÃ§Ã½k mÃ½
         IF EXISTS (SELECT 1 FROM CanUse WHERE Character_ID = @CharacterID AND Skills_ID = @SkillID)
         BEGIN
-            PRINT 'Bu skill hali hazýrda bu karakter için açýk';
+            PRINT 'Bu skill hali hazÃ½rda bu karakter iÃ§in aÃ§Ã½k';
         END
 
-        -- skillin kilidini aç
+        -- skillin kilidini aÃ§
 		INSERT INTO CanUse (Skills_ID, Character_ID, Req_Prof_Level)
         VALUES (@SkillID, @CharacterID, @RequiredProficiencyLevel);
 
-        -- Deðiþiklikleri gerçekleþtir
+        -- DeÃ°iÃ¾iklikleri gerÃ§ekleÃ¾tir
         COMMIT TRANSACTION;
 
-        PRINT 'Skill baþarýyla açýldý';
-    CATCH
+        PRINT 'Skill baÅŸarÃ½yla aÃ§Ã½ldÃ½';
+    END TRY
     BEGIN CATCH
-        -- Hata olursa eski durumuna dön
+        -- Hata olursa eski durumuna dÃ¶n
         ROLLBACK TRANSACTION;
 
     END CATCH
