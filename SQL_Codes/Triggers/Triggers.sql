@@ -66,7 +66,7 @@ BEGIN
     END
     ELSE
     BEGIN
-        RAISERROR('Inventory capacity exceeded.', 16, 1);
+        RAISERROR('Envanter kapasitesi aşıldı.', 16, 1);
         ROLLBACK TRANSACTION;
     END
 END;
@@ -99,7 +99,7 @@ BEGIN
     END
     ELSE
     BEGIN
-        RAISERROR('Inventory current amount cannot be negative.', 16, 1);
+        RAISERROR('Envanterdeki eşya sayısı negatif olamaz', 16, 1);
         ROLLBACK TRANSACTION;
     END
 END;
