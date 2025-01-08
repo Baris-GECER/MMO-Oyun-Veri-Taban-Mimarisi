@@ -10,14 +10,13 @@ BEGIN
         DECLARE @AttributeID INT;
 		
         -- Karakter verilerini al
-        SELECT Character_XP, Character_Req_XP, Character_Level, Attribute_ID
-        INTO @CurrentXP, @RequiredXP, @Level, @AttributeID
+        SELECT @CurrentXP =  Character_XP, @RequiredXP = Character_Req_XP, @Level = Character_Level, @AttributeID = Attribute_ID
         FROM Player_Character
         WHERE Character_ID = @CharacterID;
 
 		if @CurrentXP < @RequiredXP
         BEGIN
-            PRINT 'Character does not have enough XP to level up.';
+            PRINT 'Karakter seviye atlamak için gereken tecrübe puanına sahip değil.';
         END;
 
 		else
@@ -25,7 +24,6 @@ BEGIN
         -- Level atladý mý?
 			WHILE @CurrentXP >= @RequiredXP
 			BEGIN
-				@LevelUpAmount = @LevelUpAmount + 1;
 				SET @CurrentXP = @CurrentXP - @RequiredXP; -- XP'yi gerekli miktar kadar azalt
 				SET @Level = @Level + 1;                  -- level artýþý
 				SET @RequiredXP = @RequiredXP + (@RequiredXP / 2); -- Gereken XP yi 1.5 katýna çýkar
@@ -33,7 +31,7 @@ BEGIN
 				-- ödül olarak nitelikleri güncelle
 				UPDATE Attributes
 				SET 
-			        Max_Health = Max_Health + 10),
+			        Max_Health = Max_Health + 10,
 		            Strength = Strength + 2,
 	                MagicPower = MagicPower + 2,
 					Armor = Armor + 1
@@ -65,8 +63,7 @@ BEGIN
         -- Commit the transaction if all operations succeed
         COMMIT TRANSACTION;
 
-    CATCH
-
+    END TRY
     BEGIN CATCH
         -- Rollback the transaction in case of any errors
         ROLLBACK TRANSACTION;
